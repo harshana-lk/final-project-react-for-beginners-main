@@ -2,12 +2,18 @@ import { Box, Grid, GridItem, useBreakpointValue } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import GameGrid from "./components/GameGrid";
 import GenreList from "./components/GenreList";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Genre } from "./hooks/useGenre";
 import PlatformSelector from "./components/PlatformSelector";
+import { Platform } from "./hooks/useGames";
+
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+}
 
 function App() {
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
 
   // useBreakpointValue
   const showSidebar = useBreakpointValue({ base: false, lg: true });
@@ -42,15 +48,22 @@ function App() {
           }}
         >
           <GenreList
-            onSelectGenre={(genre: Genre) => setSelectedGenre(genre)}
-            selectedGenre={selectedGenre}
+            onSelectGenre={(genre: Genre) =>
+              setGameQuery({ ...gameQuery, genre })
+            }
+            selectedGenre={gameQuery.genre}
           />
         </GridItem>
       )}
 
       <GridItem area="main" paddingY={5}>
-        <PlatformSelector />
-        <GameGrid selectedGenre={selectedGenre} />
+        <PlatformSelector
+          selectedPlatform={gameQuery.platform}
+          onSelectedPlatform={(platform) =>
+            setGameQuery({ ...gameQuery, platform })
+          }
+        />
+        <GameGrid gameQuery={gameQuery} />
       </GridItem>
 
       <GridItem area="footer" bg={"brown"} w="full">
