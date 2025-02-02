@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Genre } from "./hooks/useGenre";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/useGames";
+import GameHeading from "./components/GameHeading";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -22,8 +23,8 @@ function App() {
   return (
     <Grid
       templateAreas={{
-        base: `"nav" "main" "footer"`,
-        lg: `"nav nav" "aside main" "footer footer"`,
+        base: `"nav" "main" `,
+        lg: `"nav nav" "aside main"`,
       }}
     >
       <GridItem area="nav" position="sticky" top={0} zIndex={1} bg="black">
@@ -62,6 +63,7 @@ function App() {
       )}
 
       <GridItem area="main" paddingY={5}>
+        <GameHeading gameQuery={gameQuery} />
         <PlatformSelector
           selectedPlatform={gameQuery.platform}
           onSelectedPlatform={(platform) =>
@@ -69,12 +71,6 @@ function App() {
           }
         />
         <GameGrid gameQuery={gameQuery} />
-      </GridItem>
-
-      <GridItem area="footer" bg={"brown"} w="full">
-        <Box w="full" textAlign="center" p={4}>
-          Footer
-        </Box>
       </GridItem>
     </Grid>
   );
